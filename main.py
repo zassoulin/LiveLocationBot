@@ -12,10 +12,10 @@ if __name__ == '__main__':
         raise ValueError('Telegram API token not found in the configuration file')
 
     telegramBot = TelegramBot(api_token)
-    telegramBot.join_group(-1001397114707)
-    telegramBot.join_group(-1001908727000)
+    # telegramBot.join_group(-1001397114707)
+    # telegramBot.join_group(-1001908727000)
     invite_link = 'https://t.me/+wECw9MIc53AwMTI0'
-    telegramBot.join_group_or_channel(invite_link)
+    telegramBot.join_group(invite_link)
     telegramBot.start_polling()
     while True:
         pass

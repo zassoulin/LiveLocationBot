@@ -20,12 +20,27 @@ class TelegramBot:
             chat_id = message.chat.id
             message_text = message.text
             print(f"Received message in channel {chat_id}: {message_text}")
-    def join_group(self, group_id):
+    def join_group(self, invite_link):
         try:
-            self.bot.get_chat(group_id)  # Check if the bot can access the group
-            self.group_ids.append(group_id)
-            print(f"Bot has joined group with ID {group_id}")
+            group_id = self._parse_invite_link(invite_link)
+            if group_id:
+                self.bot.send_message(group_id, "Hello! I've joined this group.")
+                self.group_ids.append(group_id)
+                print(f"Bot has joined group with ID {group_id}")
+            else:
+                print("Invalid invite link.")
+
         except telebot.apihelper.ApiTelegramException as e:
-            print(f"Failed to join group with ID {group_id}: {e}")
+            print(f"Failed to join group using invite link: {e}")
+
+    def _parse_invite_link(self, invite_link):
+        # Regular expression to extract group ID from the invite link
+        pattern = re.compile(r'https:\/\/t\.me\/\+(\w+)')
+
+        match = re.match(pattern, invite_link)
+        if match:
+            return match.group(1)
+        else:
+            return None
     def start_polling(self):
         self.bot.polling(none_stop=True)
